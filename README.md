@@ -52,10 +52,14 @@ Microarchitecture and circuits is the specific implementation of that ISA.
 For a large number of instructions to be executed, only then the total time is reduced by a factor of k(splits).
 
 ## Why a buffering mechanism is needed?
-The combinational ckts that lie within the pipeline have different amount of delays. The input to the stage must be stable for a specific amount of time as only then the output can be determined, if the input of a stage changes then the output can change at the wrong time if the previous stage has much lesser delay. So we try to synchornize the stages by the delay of the slowest stage+delay of latch as the clk frequency of the entire operation or the frequency of production of output. That can be done by inserting baskets/latches in between stages so as to hold the previous outputs so as to isolate the inputs and outputs from each other. 
+The combinational ckts that lie within the pipeline have different amount of delays. The input to the stage must be stable for a specific amount of time as only then the output can be determined, if the input of a stage changes then the output can change at the wrong time if the previous stage has much lesser delay. So we try to synchornize the stages by the delay of the slowest stage + delay of latch as the clk frequency of the entire operation or the frequency of production of output. That can be done by inserting baskets/latches in between stages so as to hold the previous outputs so as to isolate the inputs and outputs from each other. 
 This frequency(f=1/T) represents the throughput of the pipeline per unit time.
 Speedup-: less_time(stages)/more_time(no stages) . Try to derive this yourself.
 Efficiency = Speedup/ideal_speedup. Ideal speedup is the number of stages
+
+If an old instruction running in the pipeline has variable that needs to be used as it is without any modification then that variable is transferred through latches in each clock. For every single variable that is suppossed to be propagated through stages or is used in only a specific stages as known beforehand then it is replicated to multiple variables with first name having the name of the inter-stage latch name. 
+Eg-: EX_MEM_ALUOut,etc.
+All the variables are implemented as inter stage latches.
 
 ## Important Delays:
 
@@ -92,4 +96,46 @@ The R-type instructions execute the basic Arithmetic and Logical operations.
 
 The I- type instruction includes the basic Arithmetic operations along with **load/store and branch instructions**
 
+
+# MIPS32 Instruction Cycle
+The instruction cycle or the time required to complete one instruction is divided into 5 steps:
+The default number of ports that come with a simple declaration of a register bank are 3. 2 for concurrent output or the read ports and 1 is a write port.
+Whereas, in case of a BRAM it can be single-port or dual port as per user's choice.
+
+## This is the view of how our processor's stages work in a pipeline-:
+
+<img width="1188" height="505" alt="image" src="https://github.com/user-attachments/assets/9d075ca7-e461-4bb9-901a-fa292dfa969b" />
+
+### Instead of a normal clock , 2-phase clock is implemented as it offers complete seperation of one stage from the other and hence the input does not change unnecessarily affecting the output.
+
+<img width="1215" height="472" alt="image" src="https://github.com/user-attachments/assets/a05aaeb0-b6cd-438a-aac3-9075664f5113" />
+
+## The better way to analyze the 2-phase clocking is this compared to a simply combining them together for ease.
+![WhatsApp Image 2026-01-08 at 7 09 54 PM](https://github.com/user-attachments/assets/04f95233-3135-4b43-9638-fc6186fc8763)
+
+# Micro-operations for pipelined processor
+
+<img width="1195" height="477" alt="image" src="https://github.com/user-attachments/assets/0b2165c5-a915-44b0-ada9-01e71aaad4d5" />
+
+
+<img width="1111" height="476" alt="image" src="https://github.com/user-attachments/assets/2341e80e-41c2-407c-a60f-1c7b2682c566" />
+
+
+<img width="1172" height="516" alt="image" src="https://github.com/user-attachments/assets/a18d72e3-3539-447a-a9f1-f0f660e1f2ae" />
+
+<img width="1092" height="440" alt="image" src="https://github.com/user-attachments/assets/87a296e2-e770-4b63-a3de-6c7c50f44f0d" />
+
+<img width="1277" height="495" alt="image" src="https://github.com/user-attachments/assets/856a328e-77d5-45de-8d16-d8e780a25a4a" />
+
+<img width="1156" height="493" alt="image" src="https://github.com/user-attachments/assets/3ca59b97-9eba-4e1a-b764-970e876814fc" />
+
+<img width="1277" height="495" alt="image" src="https://github.com/user-attachments/assets/fe109654-e816-4fac-aee0-cf90cd6dbf5e" />
+
+
+<img width="1256" height="531" alt="image" src="https://github.com/user-attachments/assets/66fce8ac-8774-4682-b888-aed46e401b40" />
+
+
+<img width="1227" height="561" alt="image" src="https://github.com/user-attachments/assets/c24589e1-65d8-4cdc-8d4c-ce338a11d210" />
+
+<img width="1297" height="541" alt="image" src="https://github.com/user-attachments/assets/be9688e2-efa0-457f-b381-c085e921139f" />
 
