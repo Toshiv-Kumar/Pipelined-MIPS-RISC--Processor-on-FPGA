@@ -123,6 +123,9 @@ Whereas, in case of a BRAM it can be single-port or dual port as per user's choi
 
 <img width="1172" height="516" alt="image" src="https://github.com/user-attachments/assets/a18d72e3-3539-447a-a9f1-f0f660e1f2ae" />
 
+For byte addressable memory pc has to be incremented by +4. Each byte has its own address and hence only after 4 bytes(32bits) we can actually access the next instruction.
+
+
 <img width="1092" height="440" alt="image" src="https://github.com/user-attachments/assets/87a296e2-e770-4b63-a3de-6c7c50f44f0d" />
 
 <img width="1277" height="495" alt="image" src="https://github.com/user-attachments/assets/856a328e-77d5-45de-8d16-d8e780a25a4a" />
@@ -139,3 +142,25 @@ Whereas, in case of a BRAM it can be single-port or dual port as per user's choi
 
 <img width="1297" height="541" alt="image" src="https://github.com/user-attachments/assets/be9688e2-efa0-457f-b381-c085e921139f" />
 
+
+# Quick-view at operations for different types of instructions in short
+
+<img width="1212" height="445" alt="image" src="https://github.com/user-attachments/assets/ced32a80-6953-4d21-bee0-44d7554df374" />
+
+<img width="1236" height="556" alt="image" src="https://github.com/user-attachments/assets/12bb9153-042f-4eb4-8053-751fac29e8bc" />
+
+<img width="657" height="425" alt="image" src="https://github.com/user-attachments/assets/1b08dc26-34cd-462a-9005-6d610cd52f0a" />
+
+# Hazards in a pipeline implementation
+1. Structural -: Happens when 2 stages of pipeline that have different instructions in them and they happen to use the same piece of hardware to read or write. That hardware may not support many concurrent read/writes at the same time.
+2. Data hazards -: It arises due to instruction dependency. When an instruction uses a suposedly modified register/Memory from the previous instruction, then it is highly likely that modification is not yet done on the data and we are actually picking up the old value as the previous instruction is not yet completed and still stuck in one of the pipeline stages.
+3. Control hazards -: It arises due to branch instructions. Whether the branch is to be executed or not is determined in the EX stage and by that time the next instruction from the wrong PC address was picked up. Hence 1 clock cycle is wasted there.
+We only prevented Data hazards by dummy instructions in the assembly code as the user instead of implemented data forwarding.
+
+# Implementation using Verilog
+
+<img width="1272" height="535" alt="image" src="https://github.com/user-attachments/assets/398a93e7-1562-427d-9562-5639f46d4485" />
+
+1. Halted variable logic(For pipeline) -: As per the timing diagram above, after instruction opcode decoding we come to know that it is a Halt instruction but we cannot yet halt the program since there is 1 previous instruction that is there in the pipeline that needs to be fully executed so we only place the HALTED flag as 1 at WB of the HLT instruction.
+2. TAKEN_BRANCH logic -: According to the timing diagram, only the very next instruction after the branch instruction is invalid. So accordingly we turn on the TAKEN_BRANCH variable in IF_ID stage after EX_MEM_cond is set to 1 and the branch variable is immediately turned off on the very next clk1. This prevents the previous invalid instruction to write data and allows the 3rd(compared to branch[1st]) to write and read data in MEM and WB.
+Do note that nptel taught it wrong, specifically the timing diagram that shows using simple clock compared to the actual 2-phase implementation. 
