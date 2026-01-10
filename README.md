@@ -1,6 +1,5 @@
 # Pipelined-MIPS-RISC-Processor-on-FPGA
-Designed a 32-bit RISC(Reduced Instruction set architecture) based pipelined processor and implemented the complete FPGA design flow using Vivado. Verified the design by implementing a factorial program.
-# Overview in short and complete Theory explained later-:
+## Overview in short and complete Theory explained later-:
 
 **32-bit Pipelined MIPS RISC Processor on FPGA**
 A Verilog-based implementation of a MIPS32 RISC processor using pipelining concepts and realized through the complete FPGA design flow on a Xilinx FPGA.
