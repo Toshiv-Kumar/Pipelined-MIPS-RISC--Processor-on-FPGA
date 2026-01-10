@@ -3,7 +3,8 @@ Designed a 32-bit RISC(Reduced Instruction set architecture) based pipelined pro
 # Overview in short and complete Theory explained later-:
 
 
-## Theory
+
+# Theory
 ### Let's start with the basics of COA:
 What is the difference between  Computer Organization and Architecture?
 
@@ -213,3 +214,24 @@ IP catalog -> Block Memory Generator -> Upload .coe file to initialize the memor
 ##  Optimization strategies implemented:
 Note-: BUFG: It takes a clock input and produces a low‑skew, low‑jitter clock output routed on the FPGA’s global clock routing so flip‑flops and clocked resources see a clean, synchronized clock.
 Power optimization implementation strategy is used that showed decrease in enable rate of primitives.
+
+## Learnings/Challenges:
+1.Vivado automatically picks up TB even when it is a simulation source so for fpga implementation it must be deleted so that it does not interfere.
+2.NPTEL taught it wrong. The taken branch should be turned off the very next clk1 edge after it is turned on as there is only one invalid(next) instruction not 2 invalid instructions.
+3.Implemented LUTRAM or distributed ram for our single port ram as the block ram is configured as a dual port ram.
+4.For loop does not work well in synthesizable(sequential ckt) code as per me because it uses blocking assignment and it can't really work with non-blocking assignments due to the increment that we need to do everytime.
+5."Critical Warning of Multi-driven net Q" -: Same register is assigned values in more than 1 always blocks. It does not matter if there is a race or not because the tool cannot identify a race condition. You are just not allowed to assign values on the same register variable in multiple always blocks.
+6.For FPGA synthesis Initialization to 0 is not synthesizable usually(tool dependent) so use an asynchronous reset pin to initialize things to any value you wish.
+7.Tcl console shows different errors compared to the messages tab so both should be used for debugging.
+8.When the posedge of a clk/anything hits then that means that that thing has just become one so the if(clk==1'b1) evaluates as true.
+9.2 - Phase Non-overlapping clocks are difficult to implement as they are not suitable for synthesis so I had to implement overlapping clocks.
+10.If structural modelling is used in a sequential ckt then still the ports that are mapped to the initialized module, they need to be declared of wire type as they are being driven by another ckt. Also, these modules need to named as objects
+11.Challenges faced: Over utilization during placement of hardware. Solution: 1. Reduced control sets that were due to 2-phase clock generation and converted the design into fpga friendly
+single clock domain(input clk used for the always posedge block) with clock enables as conditionals for different pipeline stages and reduced the always blocks in the module.
+  2. Used BLock RAM IP with initialized instructions using .coe file to decrease resource utilization of LUTRAM. Added new pipelines stages within a single pipeline stage as the BRAM has latency of 2 clock cycles to read data. To implement a pipeline within a pipeline 2 counters are implemented in IF(counterif) and in MEM(counterld) stage. If this nested pipeline is on(working) then all the other outer(main) pipeline are paused so that this can finish up.
+12. Never to trust AI to create a big coe file or write tcl commands for you.
+13. Even though it may seem counter intuitive that the clk needs an input port pin through the fpga but it sure does because otherwise we get the error of input port pin unconnected.  It needs to connect to board’s oscillator pin or a global clock‑capable I/O. An I/O bank is a group of FPGA pins that share the same power rail and electrical rules, so all pins in a bank must use compatible I/O standards; special I/O pins are dedicated or enhanced pins (clock-capable, configuration, memory‑interface, or high‑speed I/O) that provide functions or performance not available on ordinary user I/Os.
+14. `default: begin end is syntactically correct but it is as good as if it is not there because its main purpose is to prevent latch formation and if all cases are not covered(and they aren't when we leave default empty) then latch will definitely form. But, in this project there is not much to think as every variable that we assign values to is already defined and used a register/Flip flop so it does not matter much.
+15. At last-: The timing diagram(waveform viewer) is always there to help you to debug the errors in the program so don't be afraid to take bets and make improvements or optimizations. Everything is fixable using the timing diagram.
+
+
