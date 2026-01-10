@@ -2,6 +2,114 @@
 Designed a 32-bit RISC(Reduced Instruction set architecture) based pipelined processor and implemented the complete FPGA design flow using Vivado. Verified the design by implementing a factorial program.
 # Overview in short and complete Theory explained later-:
 
+## 🏷️ Title
+
+**32-bit Pipelined MIPS RISC Processor on FPGA**
+A Verilog-based implementation of a MIPS32 RISC processor using pipelining concepts and realized through the complete FPGA design flow on a Xilinx FPGA.
+
+---
+
+## 📦 GitHub Badges
+
+![MIPS](https://img.shields.io/badge/ISA-MIPS32-blue?style=flat-square) 
+<img src="https://img.shields.io/badge/HDL-Verilog-blue.svg" />
+<img src="https://img.shields.io/badge/EDA-Xilinx%20Vivado-brightgreen.svg" />
+
+---
+
+## 🧩 Overview
+
+This project presents the design and FPGA implementation of a **32-bit MIPS RISC pipelined processor**, focusing on **computer organization concepts, pipeline behavior, and practical FPGA constraints**.
+The processor is verified using simulation and a factorial program stored in on-chip memory.
+
+---
+
+## ✨ Features
+
+* 5-stage pipelined MIPS32 architecture (IF, ID, EX, MEM, WB)
+* Register-Register-Load-Store ISA model
+* Little-endian memory organization
+* Instruction memory initialized using `.coe` file
+* FPGA-friendly single clock domain with clock-enable based control
+* Verified through waveform analysis and hardware-oriented design checks
+
+---
+
+## 📊 Simulation Waveform & Schematic
+
+Simulation waveforms and synthesized schematics are used to validate **instruction flow, pipeline timing, control signals, and memory interactions** across clock cycles.
+<img width="908" height="627" alt="MIPS32_factorial_timing" src="https://github.com/user-attachments/assets/a5be34af-d2b0-4583-aaa8-946f9d5347d9" />
+
+
+<img width="1061" height="615" alt="image" src="https://github.com/user-attachments/assets/93632b27-8198-4ef2-95c5-9fbb129daebc" />
+
+
+---
+
+## 🛠️ EDA Tools & Technologies
+
+* **HDL:** Verilog
+* **EDA Tool:** Xilinx Vivado Design Suite
+* **Memory:** Block RAM (BRAM) IP with `.coe` initialization
+* **Target Hardware:** Boolean FPGA Board
+* **Methodology:** RTL design → Simulation → Synthesis → Implementation → Bitstream
+
+---
+
+## 📘 Learnings
+
+1. Vivado automatically picks up the testbench (TB) even when it is added as a simulation source, so for FPGA implementation it must be deleted so that it does not interfere.
+
+2. NPTEL taught it wrong. The taken branch should be turned off at the very next clk1 edge after it is turned on, as there is only one invalid (next) instruction, not two invalid instructions.
+
+3. Implemented LUTRAM (distributed RAM) for our single-port RAM, as the block RAM is configured as a dual-port RAM.
+
+4. For loops do not work well in synthesizable (sequential circuit) code as per me, because they use blocking assignments and they cannot really work well with non-blocking assignments due to the increment that we need to do every time.
+
+5. **“Critical Warning of Multi-driven net Q”**: The same register is assigned values in more than one always block. It does not matter if there is a race or not, because the tool cannot identify a race condition. You are simply not allowed to assign values to the same register variable in multiple always blocks.
+
+6. For FPGA synthesis, initialization to 0 is usually not synthesizable (tool-dependent), so use an asynchronous reset pin to initialize things to any value you wish.
+
+7. The Tcl console shows different errors compared to the Messages tab, so both should be used for debugging.
+
+8. When the posedge of a clock (or anything) hits, that means that the signal has just become 1, so the condition `if (clk == 1'b1)` evaluates as true.
+
+9. Two-phase non-overlapping clocks are difficult to implement because they are not suitable for synthesis, so I had to implement overlapping clocks.
+
+10. If structural modelling is used in a sequential circuit, then the ports that are mapped to the instantiated modules still need to be declared as wire type, as they are being driven by another circuit. Also, these modules need to be named as objects.
+
+11. **Challenges faced: Over-utilization during placement of hardware.**
+    **Solution:**
+
+    1. Reduced control sets that were caused by 2-phase clock generation and converted the design into an FPGA-friendly single clock domain (input clk used for the always posedge block) with clock enables as conditionals for different pipeline stages, and reduced the number of always blocks in the module.
+    2. Used Block RAM IP with initialized instructions using a `.coe` file to decrease resource utilization compared to LUTRAM. Added new pipeline stages within a single pipeline stage, as the BRAM has a latency of 2 clock cycles to read data. To implement a pipeline within a pipeline, two counters were implemented in the IF stage (counterif) and in the MEM stage (counterld). If this nested pipeline is active (working), then all the other outer (main) pipeline stages are paused so that this can finish.
+
+12. Never trust AI to create a big `.coe` file or write Tcl commands for you.
+
+13. Even though it may seem counter-intuitive that the clock needs an input port pin through the FPGA, it does, because otherwise we get the error of an input port pin being unconnected. It needs to connect to the board’s oscillator pin or a global clock-capable I/O. An I/O bank is a group of FPGA pins that share the same power rail and electrical rules, so all pins in a bank must use compatible I/O standards. Special I/O pins are dedicated or enhanced pins (clock-capable, configuration, memory-interface, or high-speed I/O) that provide functions or performance not available on ordinary user I/Os.
+
+14. `default: begin end` is syntactically correct, but it is as good as not being there because its main purpose is to prevent latch formation. If all cases are not covered (and they aren’t when we leave default empty), then a latch will definitely form. However, in this project there is not much to worry about, as every variable that we assign values to is already defined and used as a register/flip-flop, so it does not matter much.
+
+15. **At last:** The timing diagram (waveform viewer) is always there to help you debug errors in the program, so don’t be afraid to take risks and make improvements or optimizations. Everything is fixable using the timing diagram.
+
+
+---
+
+## 🧠 Theory / Challenges
+
+This section explains the **theoretical foundation and design decisions**, covering COA basics, ISA design, pipelining principles, hazards, clocking strategies, memory interfacing, and FPGA optimization challenges encountered during implementation.
+It also discusses how real FPGA constraints influenced architectural changes compared to ideal textbook designs.
+
+---
+
+If you want, next I can:
+
+* ✍️ Rewrite **Theory/Challenges** into a **short “for interview” version**
+* 🎯 Optimize this README for **GitHub visibility**
+* 📐 Help you decide **what theory to keep vs move to docs/**
+* 🧪 Add a **“Verification & Results”** micro-section
+
+Just tell me.
 
 
 # Theory
