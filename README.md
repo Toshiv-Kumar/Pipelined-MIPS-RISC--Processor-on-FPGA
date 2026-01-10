@@ -177,4 +177,32 @@ The assembly codes are saved in Ram(Memory) and they are picked up by PC that ac
 
 <img width="1305" height="476" alt="image" src="https://github.com/user-attachments/assets/ea8f9a5c-dd93-43a4-8214-df3a7cf26fc7" />
 
-General points to note-: 1. Instead of a direct behavioural model as done here, the datapath(structures/hardwares and their interconnections) and controller(FSM- control signal generation) design is ideal for larger designs.
+## Additional Important things in this design and code:
+1. Instead of a direct behavioural model as done here, the datapath(structures/hardwares and their interconnections) and controller(FSM- control signal generation) design is ideal for larger designs.
+2. We give #2 delay to all procedural assignment statements as there is always a little bit of delay in real hardware. To maintain consistency and prevent race condition all of the assignments must have equal delay value.
+
+# FPGA(Field Programmable Gate Array) Design Flow:
+1. Specification: What a costomer expects in a design.
+2.  Design Entry(How we add a design of a system in vivado ide)-
+  a. Text-based design: We add design in verilog/vhdl/systemverilog.
+  b. Graphic based design: **IP Integrattor or block design.**
+ Graphics based design is also converted to text based in later stages of **design entry** using hdl wrapper feature.
+ Clock divider is needed to convert FPGA's default Megahertz clock to human visible 0.1hz or 1hz clock.
+4. Behavioural Simulation/Functional Verification: Verify outputs on inputs
+5. Synthesis:
+Here we convert our functionality/hdl into fpga primitives that are available in FPGA family. The netlist(interconnection of wires) of logical cells
+**Note-:** Primitives = physical resources on the FPGA die. Examples: LUTs (look‑up tables), FFs (flip‑flops), block RAMs, DSP slices, I/O buffers, global clock buffers, PLL/MMCM
+Cells = logical instances in the netlist. They represent the function your RTL requested but in the vocabulary of the target FPGA family. For example, a 2‑input AND in RTL becomes a LUT cell; a register becomes an FF cell.
+
+7. Post-Synthesis functional simulation to make sure it still works fine.
+8. We add constraint files(I/O planning) to map **input and ouput ports/pins of fpga to in an out of our hdl design**
+9. Implementation will add our design to fpga die using slices and resourcese available on fpga and does routing and placement.
+10. Post implement functional simulation to verify
+11. Generate bitstream/ programming file 
+12. Ready to verify our design on hardware . Open hardware manager and upload file on fpga then verification starts.
+13. Sometimes on hardware it does not work as needed . We probe a debug code in our design and start analysing problems in our design. We will be choosing a net and add a debug code then start analysing signal we are getting on that net. We revisit to design entry if it didn't work and vary certain part of the code then follow entire process till we get the circuit that we want.
+
+<img width="1153" height="661" alt="image" src="https://github.com/user-attachments/assets/d655614b-6d27-4e65-b61a-c0f36ba30b25" />
+
+## Process of invoking the BRAM IP to make use of Block memory available on FPGA die
+IP catalog -> Block Memory Generator -> Upload .coe file to initialize the memory with values -> generate output products **globally(Synthesize options)** -> access the vhdl source code of BRAM and initialize this subsystem in the main design file by mapping/connecting I/O ports.
