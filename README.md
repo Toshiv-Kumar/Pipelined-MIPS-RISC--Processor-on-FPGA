@@ -206,3 +206,10 @@ Cells = logical instances in the netlist. They represent the function your RTL r
 
 ## Process of invoking the BRAM IP to make use of Block memory available on FPGA die
 IP catalog -> Block Memory Generator -> Upload .coe file to initialize the memory with values -> generate output products **globally(Synthesize options)** -> access the vhdl source code of BRAM and initialize this subsystem in the main design file by mapping/connecting I/O ports.
+
+ IP stands for Intellectual Property. An IP core is a reusable, pre-designed block of logic that can be integrated into a larger design. BRAM is an example of hard IP
+ Hard IP: Optimized, pre-designed circuit layout that implements a specific function
+
+##  Optimization strategies implemented:
+Note-: BUFG: It takes a clock input and produces a low‑skew, low‑jitter clock output routed on the FPGA’s global clock routing so flip‑flops and clocked resources see a clean, synchronized clock.
+Power optimization implementation strategy is used that showed decrease in enable rate of primitives.
