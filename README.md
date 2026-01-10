@@ -93,23 +93,6 @@ Simulation waveforms and synthesized schematics are used to validate **instructi
 
 ---
 
-## 🧠 Theory / Challenges
-
-This section explains the **theoretical foundation and design decisions**, covering COA basics, ISA design, pipelining principles, hazards, clocking strategies, memory interfacing, and FPGA optimization challenges encountered during implementation.
-It also discusses how real FPGA constraints influenced architectural changes compared to ideal textbook designs.
-
----
-
-If you want, next I can:
-
-* ✍️ Rewrite **Theory/Challenges** into a **short “for interview” version**
-* 🎯 Optimize this README for **GitHub visibility**
-* 📐 Help you decide **what theory to keep vs move to docs/**
-* 🧪 Add a **“Verification & Results”** micro-section
-
-Just tell me.
-
-
 # Theory
 ### Let's start with the basics of COA:
 What is the difference between  Computer Organization and Architecture?
