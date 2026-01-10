@@ -4,10 +4,6 @@
 **32-bit Pipelined MIPS RISC Processor on FPGA**
 A Verilog-based implementation of a MIPS32 RISC processor using pipelining concepts and realized through the complete FPGA design flow on a Xilinx FPGA.
 
----
-
-## 📦 GitHub Badges
-
 ![MIPS](https://img.shields.io/badge/ISA-MIPS32-blue?style=flat-square) 
 <img src="https://img.shields.io/badge/HDL-Verilog-blue.svg" />
 <img src="https://img.shields.io/badge/EDA-Xilinx%20Vivado-brightgreen.svg" />
@@ -32,7 +28,7 @@ The processor is verified using simulation and a factorial program stored in on-
 
 ---
 
-## 📊 Simulation Waveform & Schematic
+## 📊 Simulation Waveform, Schematic and FPGA Implementation
 
 Simulation waveforms and synthesized schematics are used to validate **instruction flow, pipeline timing, control signals, and memory interactions** across clock cycles.
 <img width="908" height="627" alt="MIPS32_factorial_timing" src="https://github.com/user-attachments/assets/a5be34af-d2b0-4583-aaa8-946f9d5347d9" />
@@ -89,6 +85,14 @@ Simulation waveforms and synthesized schematics are used to validate **instructi
 
 15. **At last:** The timing diagram (waveform viewer) is always there to help you debug errors in the program, so don’t be afraid to take risks and make improvements or optimizations. Everything is fixable using the timing diagram.
 
+## 📚 References  
+[NPTEL \& IIT KGP 'Hardware Modeling using Verilog'- Prof. Indranil Sengupta](https://nptel.ac.in/courses/106105165)
+
+* **Verilog for an FPGA Engineer with Xilinx Vivado Design Suite** — *Udemy Course*
+  [https://www.udemy.com/share/1036pm3@vtwLAYYelocfHg9SxTBRFEEOEfSQTfhX05M8cITcTPmKNcHB-MFQWssO01Xkw_6ivw==/](https://www.udemy.com/share/1036pm3@vtwLAYYelocfHg9SxTBRFEEOEfSQTfhX05M8cITcTPmKNcHB-MFQWssO01Xkw_6ivw==/)
+
+* **Advanced Computer Architecture** — *NPTEL Course (up to lecture 7)*
+  [https://nptel.ac.in/courses/106103206](https://nptel.ac.in/courses/106103206)
 
 ---
 
