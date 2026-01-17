@@ -36,6 +36,9 @@ Simulation waveforms and synthesized schematics are used to validate **instructi
 
 <img width="1061" height="615" alt="image" src="https://github.com/user-attachments/assets/93632b27-8198-4ef2-95c5-9fbb129daebc" />
 
+- Generation of 7! on FPGA:
+![WhatsApp Image 2026-01-17 at 5 18 09 PM](https://github.com/user-attachments/assets/81a3832e-7750-45d3-b01b-4080a425816a)
+
 
 ---
 
@@ -319,7 +322,7 @@ Power optimization implementation strategy is used that showed decrease in enabl
 9.2 - Phase Non-overlapping clocks are difficult to implement as they are not suitable for synthesis so I had to implement overlapping clocks.
 10.If structural modelling is used in a sequential ckt then still the ports that are mapped to the initialized module, they need to be declared of wire type as they are being driven by another ckt. Also, these modules need to named as objects
 11.Challenges faced: Over utilization during placement of hardware. Solution: 1. Reduced control sets that were due to 2-phase clock generation and converted the design into fpga friendly
-single clock domain(input clk used for the always posedge block) with clock enables as conditionals for different pipeline stages and reduced the always blocks in the module.
+single clock domain(input clk used for the always posedge block) with clock enables(see and learn how to implement this logic) as conditionals for different pipeline stages and reduced the always blocks in the module.
   2. Used BLock RAM IP with initialized instructions using .coe file to decrease resource utilization of LUTRAM. Added new pipelines stages within a single pipeline stage as the BRAM has latency of 2 clock cycles to read data. To implement a pipeline within a pipeline 2 counters are implemented in IF(counterif) and in MEM(counterld) stage. If this nested pipeline is on(working) then all the other outer(main) pipeline are paused so that this can finish up.
 12. Never to trust AI to create a big coe file or write tcl commands for you.
 13. Even though it may seem counter intuitive that the clk needs an input port pin through the fpga but it sure does because otherwise we get the error of input port pin unconnected.  It needs to connect to board’s oscillator pin or a global clock‑capable I/O. An I/O bank is a group of FPGA pins that share the same power rail and electrical rules, so all pins in a bank must use compatible I/O standards; special I/O pins are dedicated or enhanced pins (clock-capable, configuration, memory‑interface, or high‑speed I/O) that provide functions or performance not available on ordinary user I/Os.
