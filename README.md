@@ -277,6 +277,17 @@ The assembly codes are saved in Ram(Memory) and they are picked up by PC that ac
 1. Instead of a direct behavioural model as done here, the datapath(structures/hardwares and their interconnections) and controller(FSM- control signal generation) design is ideal for larger designs.
 2. We give #2 delay to all procedural assignment statements as there is always a little bit of delay in real hardware. To maintain consistency and prevent race condition all of the assignments must have equal delay value.
 
+# FPGA Architecture details:
+What is the need of reprogramability?
+ASICS are fixed and so the blocks have fixed functionality in terms of logic but FPGAs are reprogrammable as comprise of chain of MUX which can implement any logic function of our choice.
+![WhatsApp Image 2026-01-25 at 12 23 05 AM](https://github.com/user-attachments/assets/77c4551d-0f8d-4b11-a00c-c9da81dd11c8)
+
+This picture shows the basic block diagram of an FPGA.
+CLB(Configurable logic blocks) consists of multiple slices and each slice consists of multiple LUTs that are the fundamental logic generation units. The CLBs are connected to each other by interconnection/switching matrix that are used to implement complex logic ckts that require the use of more than 1 CLBs.
+
+In the bottom right we can see the general structure of a 2-input(4 combinations) LUT which consists of 4 single bit SRAM cells which store the output(F) which is selected based upon the input as select lines to the 4:1 MUX that is fed into a delay F/F or used combinationaly using another MUX.
+
+
 # FPGA(Field Programmable Gate Array) Design Flow:
 1. Specification: What a costomer expects in a design.
 2.  Design Entry(How we add a design of a system in vivado ide)-
