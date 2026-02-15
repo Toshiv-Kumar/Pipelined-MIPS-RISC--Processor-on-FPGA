@@ -58,7 +58,7 @@ Simulation waveforms and synthesized schematics are used to validate **instructi
 
 2. NPTEL taught it wrong. The taken branch should be turned off at the very next clk1 edge after it is turned on, as there is only one invalid (next) instruction, not two invalid instructions.
 
-3. Implemented LUTRAM (distributed RAM) for our single-port RAM, as the block RAM is configured as a dual-port RAM.
+3. Implemented BRAM IP as a dual-port RAM.
 
 4. For loops do not work well in synthesizable (sequential circuit) code as per me, because they use blocking assignments and they cannot really work well with non-blocking assignments due to the increment that we need to do every time.
 
